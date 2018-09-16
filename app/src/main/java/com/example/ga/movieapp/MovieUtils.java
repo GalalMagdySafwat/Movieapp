@@ -95,12 +95,13 @@ public class MovieUtils {
 
                 String originalTitle = currentMovies.getString("title");
                 String moviePoster = "http://image.tmdb.org/t/p/w342/"+currentMovies.getString("poster_path");
-                String overView = "Story : "+ currentMovies.getString("overview");
-                String userRating = "Average vote : "+currentMovies.getString("vote_average");
-                String releaseDate ="Release Date : " +currentMovies.getString("release_date");
+                String overView = currentMovies.getString("overview");
+                String userRating = currentMovies.getString("vote_average");
+                String releaseDate = currentMovies.getString("release_date");
+                String movieID= currentMovies.getString("id");
 
 
-                Movie movie = new Movie(originalTitle, moviePoster, overView, userRating, releaseDate);
+                Movie movie = new Movie(originalTitle, moviePoster, overView, userRating, releaseDate,movieID, null, null);
                 movies.add(movie);
 
             }
@@ -121,4 +122,96 @@ public class MovieUtils {
         List<Movie> movies =extractFeatureFromJson(jsonResponse);
         return movies;
     }
+
+
+    private static List<Reviews> extractReviewsFromJson(String movieJSON) {
+        if (TextUtils.isEmpty(movieJSON)) {
+            return null;
+        }
+        List<Reviews> reviews = new ArrayList<>();
+        try {
+
+
+            JSONObject baseJsonResponse = new JSONObject(movieJSON);
+            JSONObject videoObject = baseJsonResponse.getJSONObject("reviews");
+            JSONArray resultsArray = videoObject.getJSONArray("results");
+
+            for (int i = 0; i < resultsArray.length(); i++) {
+
+
+                JSONObject currentVideo = resultsArray.getJSONObject(i);
+
+
+                String author = currentVideo.getString("author");
+                String content = currentVideo.getString("content");
+
+
+                    Reviews review = new Reviews(author,content);
+
+                    reviews.add(review);
+
+            }
+
+        } catch (JSONException e) {
+
+            Log.e("QueryUtils", "Problem parsing the movie JSON results", e);
+        }
+        return reviews;
+    }
+    public static List<Reviews> fetchReviewsData(String requestUrl) {
+        URL url=createUrl(requestUrl);
+        String jsonResponse = null;
+        try {
+            jsonResponse=makeHttpRequest(url);
+        }catch (IOException e){
+            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
+        }
+        List<Reviews> reviews = extractReviewsFromJson(jsonResponse);
+        return reviews;
+    }
+
+
+    private static List<Videos> extractVideosFromJson(String movieJSON) {
+        if (TextUtils.isEmpty(movieJSON)) {
+            return null;
+        }
+        List<Videos> videos = new ArrayList<>();
+        try {
+
+            JSONObject baseJsonResponse = new JSONObject(movieJSON);
+            JSONObject videoObject = baseJsonResponse.getJSONObject("videos");
+            JSONArray resultsArray = videoObject.getJSONArray("results");
+
+            for (int i = 0; i < resultsArray.length(); i++) {
+
+
+                JSONObject currentVideo = resultsArray.getJSONObject(i);
+
+
+                String key = currentVideo.getString("key");
+
+                Videos video = new Videos(key);
+
+                    videos.add(video);
+                }
+
+
+        } catch (JSONException e) {
+
+            Log.e("QueryUtils", "Problem parsing the movie JSON results", e);
+        }
+        return videos;
+    }
+    public static List<Videos> fetchVideosData(String requestUrl) {
+        URL url=createUrl(requestUrl);
+        String jsonResponse = null;
+        try {
+            jsonResponse=makeHttpRequest(url);
+        }catch (IOException e){
+            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
+        }
+        List<Videos> Videos =extractVideosFromJson(jsonResponse);
+        return Videos;
+    }
+
 }

@@ -7,8 +7,10 @@
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"
-        >
-
-    </item>
+        />
+    <item
+        android:id="@+id/favouriteButton"
+        android:title="@string/favourite"
+        android:orderInCategory="101"/>
 
 </menu>

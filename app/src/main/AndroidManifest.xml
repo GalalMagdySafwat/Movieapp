@@ -18,15 +18,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MovieDetailsActivity" />
-        <activity android:name=".SettingsActivity"
+        <activity
+            android:name=".MovieDetailsActivity"
+            />
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".MovieImage" />
+        <activity
+            android:name=".SettingsActivity"
             android:label="@string/action_settings"
             android:parentActivityName=".MovieImage">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MovieImage"/>
-
+                android:value=".MovieImage" />
         </activity>
+        <activity android:name=".FavouriteActivity"
+            android:parentActivityName=".MovieImage">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MovieImage" />
+        </activity>
+        <provider
+            android:name=".MovieProvider"
+            android:authorities="com.example.ga.movieapp"
+            />
     </application>
 
 </manifest>

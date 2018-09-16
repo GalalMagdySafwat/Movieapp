@@ -20,9 +20,9 @@ import java.util.List;
 public class MovieImage extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Movie>> {
     private static final String LOG_TAG = MovieImage.class.getName();
     private static final String TMDB_REQUEST_URL =
-            "http://api.themoviedb.org/3/movie/popular?api_key=***********";
+            "http://api.themoviedb.org/3/movie/popular?api_key=44b732be7a5c1cc35ec00de3685ea301";
     private static final String TMDB_USER_RATING =
-            "http://api.themoviedb.org/3/movie/top_rated?api_key=************";
+            "http://api.themoviedb.org/3/movie/top_rated?api_key=44b732be7a5c1cc35ec00de3685ea301";
     private static final int Movie_LOADER_ID = 1;
     private ImageAdapter mAdapter;
     @Override
@@ -47,8 +47,9 @@ public class MovieImage extends AppCompatActivity implements LoaderManager.Loade
                 String title2 = currentEarthquake.getUserRating();
                 String title3 = currentEarthquake.getReleaseDate();
                 String title4 = currentEarthquake.getMoviePoster();
+                String movieid = currentEarthquake.getMovieID();
 
-                launchDetailActivity(i,title,title1,title2,title3,title4);
+                launchDetailActivity(title,title1,title2,title3,title4,movieid);
 
             }
         });
@@ -77,7 +78,7 @@ public class MovieImage extends AppCompatActivity implements LoaderManager.Loade
         mAdapter.clear();
 
     }
-    private void launchDetailActivity(int position,String title,String title1,String title2,String title3,String title4) {
+    private void launchDetailActivity(String title,String title1,String title2,String title3,String title4,String movieid) {
         Intent intent = new Intent(this, MovieDetailsActivity.class);
 
         intent.putExtra("title",title);
@@ -85,6 +86,9 @@ public class MovieImage extends AppCompatActivity implements LoaderManager.Loade
         intent.putExtra("UserRating",title2);
         intent.putExtra("ReleaseDate",title3);
         intent.putExtra("MoviePoster",title4);
+        intent.putExtra("MovieID",movieid);
+
+
         startActivity(intent);
     }
 
@@ -100,6 +104,11 @@ public class MovieImage extends AppCompatActivity implements LoaderManager.Loade
         int id = item.getItemId();
         if (id == R.id.action_settings){
             Intent startSettingActivity = new Intent(this,SettingsActivity.class);
+            startActivity(startSettingActivity);
+            return true;
+        }
+        if (id==R.id.favouriteButton){
+            Intent startSettingActivity = new Intent(this,FavouriteActivity.class);
             startActivity(startSettingActivity);
             return true;
         }

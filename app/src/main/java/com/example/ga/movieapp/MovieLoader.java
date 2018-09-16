@@ -19,10 +19,16 @@ public class MovieLoader extends AsyncTaskLoader {
 
     @Override
     public List<Movie> loadInBackground() {
+
         if (mUrl==null) {
+
             return null;
+
         }
+
         List<Movie> movies= MovieUtils.fetchMovieData(mUrl);
+
         return movies;
+
     }
 }
